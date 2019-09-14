@@ -64,20 +64,27 @@ namespace workWithText
 
             for (int i = 0; i < text.Length; i++)
             {
+                int countResetColour = 0;
                 for (int l = 0; l < dublicateList.Count; l++)
                 {
                     if (i == dublicateList[l].indexOf)
                     {
                         ConsoleColor myColor = (ConsoleColor)dublicateList[l].colour;
                         Console.ForegroundColor = myColor;
-                        for (int m = i; m < dublicateList[l].lenght + i; m++)
-                        {
-                            Console.Write(text[m]);
-                        }
-                        i += dublicateList[l].lenght;
-                        Console.ResetColor();
-                        continue;
+                        countResetColour = i + dublicateList[l].lenght;
+                        break;
+                        //for (int m = i; m < dublicateList[l].lenght + i; m++)
+                        //{
+                        //    Console.Write(text[m]);
+                        //}
+                        //i += dublicateList[l].lenght;
+                        //Console.ResetColor();
+                        //break;
                     }
+                }
+                if (i == countResetColour)
+                {
+                    Console.ResetColor();
                 }
 
                 Console.Write(text[i]);
