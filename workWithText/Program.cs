@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace workWithText
 {
     class Program
     {
-        struct Word
+        struct WordDuplicate
         {
             public int indexOf;
             public int lenght;
@@ -16,7 +17,7 @@ namespace workWithText
         }
         static void Main(string[] args)
         {
-            string text = @"В нашей команде есть программист   Иван.
+            string userText = @"В нашей команде есть программист   Иван.
 Иван умеет разрабатывать мобильные и веб приложения.
 Каждый программист в нашей команде программирует на языке С#.
 Однако Иван знает ещё язык PHP....";
@@ -25,36 +26,36 @@ namespace workWithText
 
 
 
-            string[] arrText = text.Split(new char[] { ' ', ',', '.', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] textToArray = userText.Split(new char[] { ' ', ',', '.', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-            List<string> lDublicate = new List<string>();
+            List<string> duplicateList = new List<string>();
 
-            List<Word> dublicateList = new List<Word>();
+            List<WordDuplicate> wordsDupList = new List<WordDuplicate>();
 
 
-            for (int i = 0; i < arrText.Length - 1; i++)
+            for (int i = 0; i < textToArray.Length - 1; i++)
             {
-                for (int k = i + 1; k < arrText.Length; k++)
+                for (int k = i + 1; k < textToArray.Length; k++)
                 {
-                    if (arrText[i] == arrText[k] && !lDublicate.Contains(arrText[i]))
+                    if (textToArray[i] == textToArray[k] && !duplicateList.Contains(textToArray[i]))
                     {
-                        lDublicate.Add(arrText[i]);
+                        duplicateList.Add(textToArray[i]);
                     }
                 }
             }
 
-            for (int i = 0; i < lDublicate.Count; i++)
+            for (int i = 0; i < duplicateList.Count; i++)
             {
                 int findIndex = 0;
                 while (findIndex != -1)
                 {
-                    findIndex = text.IndexOf(lDublicate[i], findIndex);
+                    findIndex = userText.IndexOf(duplicateList[i], findIndex);
                     if (findIndex > -1)
                     {
-                        dublicateList.Add(new Word()
+                        wordsDupList.Add(new WordDuplicate()
                         {
                             indexOf = findIndex,
-                            lenght = lDublicate[i].Length,
+                            lenght = duplicateList[i].Length,
                             colour = i + 1
                         });
                         findIndex += 1;
@@ -62,32 +63,26 @@ namespace workWithText
                 }
             }
 
-            for (int i = 0; i < text.Length; i++)
+            int countResetColour = 0;
+
+            for (int i = 0; i < userText.Length; i++)
             {
-                int countResetColour = 0;
-                for (int l = 0; l < dublicateList.Count; l++)
+                for (int l = 0; l < wordsDupList.Count; l++)
                 {
-                    if (i == dublicateList[l].indexOf)
+                    if (i == wordsDupList[l].indexOf)
                     {
-                        ConsoleColor myColor = (ConsoleColor)dublicateList[l].colour;
+                        ConsoleColor myColor = (ConsoleColor)wordsDupList[l].colour;
                         Console.ForegroundColor = myColor;
-                        countResetColour = i + dublicateList[l].lenght;
+                        countResetColour = i + wordsDupList[l].lenght;
                         break;
-                        //for (int m = i; m < dublicateList[l].lenght + i; m++)
-                        //{
-                        //    Console.Write(text[m]);
-                        //}
-                        //i += dublicateList[l].lenght;
-                        //Console.ResetColor();
-                        //break;
                     }
                 }
                 if (i == countResetColour)
                 {
                     Console.ResetColor();
                 }
-
-                Console.Write(text[i]);
+                Console.Write(userText[i]);
+                Thread.Sleep(100);
             }
 
             //for (int i = 0; i < arrText.Length; i++)
