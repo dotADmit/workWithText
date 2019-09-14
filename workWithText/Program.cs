@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace workWithText
 {
@@ -23,26 +22,39 @@ namespace workWithText
 Однако Иван знает ещё язык PHP....";
 
 
+            string[] textToArray = getArrayFromText(userText);
 
+            List<string> duplicateList = getListOfDuplicates(textToArray);
 
+            List<WordDuplicate> wordsDupList = getListOfDuplicatesDescription(userText, duplicateList);
 
-            string[] textToArray = userText.Split(new char[] { ' ', ',', '.', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            printTextWithColoredCopiesView(userText, wordsDupList);
 
+            Console.ReadLine();
+
+        }
+        static string[] getArrayFromText(string userText)
+        {
+            return userText.Split(new char[] { ' ', ',', '.', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+        static List<string> getListOfDuplicates(string[] wordsFromUserText)
+        {
             List<string> duplicateList = new List<string>();
-
-            List<WordDuplicate> wordsDupList = new List<WordDuplicate>();
-
-
-            for (int i = 0; i < textToArray.Length - 1; i++)
+            for (int i = 0; i < wordsFromUserText.Length - 1; i++)
             {
-                for (int k = i + 1; k < textToArray.Length; k++)
+                for (int k = i + 1; k < wordsFromUserText.Length; k++)
                 {
-                    if (textToArray[i] == textToArray[k] && !duplicateList.Contains(textToArray[i]))
+                    if (wordsFromUserText[i] == wordsFromUserText[k] && !duplicateList.Contains(wordsFromUserText[i]))
                     {
-                        duplicateList.Add(textToArray[i]);
+                        duplicateList.Add(wordsFromUserText[i]);
                     }
                 }
             }
+            return duplicateList;
+        }
+        static List<WordDuplicate> getListOfDuplicatesDescription(string userText, List<string> duplicateList)
+        {
+            List<WordDuplicate> wordsDupList = new List<WordDuplicate>();
 
             for (int i = 0; i < duplicateList.Count; i++)
             {
@@ -62,48 +74,29 @@ namespace workWithText
                     }
                 }
             }
-
+            return wordsDupList;
+        }
+        static void printTextWithColoredCopiesView(string userText, List<WordDuplicate> wordsDupList)
+        {
             int countResetColour = 0;
 
-            for (int i = 0; i < userText.Length; i++)
+            for (int i = 0; i<userText.Length; i++)
             {
-                for (int l = 0; l < wordsDupList.Count; l++)
+                for (int l = 0; l<wordsDupList.Count; l++)
                 {
                     if (i == wordsDupList[l].indexOf)
                     {
-                        ConsoleColor myColor = (ConsoleColor)wordsDupList[l].colour;
-                        Console.ForegroundColor = myColor;
+                        Console.ForegroundColor = (ConsoleColor) wordsDupList[l].colour;
                         countResetColour = i + wordsDupList[l].lenght;
                         break;
                     }
-                }
+}
                 if (i == countResetColour)
                 {
                     Console.ResetColor();
                 }
                 Console.Write(userText[i]);
-                Thread.Sleep(100);
             }
-
-            //for (int i = 0; i < arrText.Length; i++)
-            //{
-            //    Console.ResetColor();
-            //    for (int k = 0; k < lDublicate.Count; k++)
-            //    {
-            //        if (arrText[i] == lDublicate[k])
-            //        {
-            //            ConsoleColor myColor = (ConsoleColor)k + 3;
-            //            Console.ForegroundColor = myColor;
-            //        }
-            //    }
-            //    Console.Write(arrText[i] + " ");
-            //}
-
-
-
-
-            Console.ReadLine();
-
         }
-    }
+}
 }
